@@ -51,7 +51,7 @@
     let msg_type = msg_str[0].slice(1, -2);
     if (msg_type == "msg") {
       let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+\n/);
-      let type_str = in_str.match(/<\u7c7b\u578b>((\u56fe\u7247)|(\u6587\u5b57)|(\u89c6\u9891)|(\u97f3\u9891))\n/);
+      let type_str = in_str.match(/<\u7c7b\u578b>((\u56fe\u7247)|(\u6587\u672c)|(\u89c6\u9891)|(\u97f3\u9891))\n/);
       let text_str = in_str.match(/<\u6b63\u6587>\n[^.]+/);
       if (date_str === null || type_str === null || text_str === null) {
         return false;
