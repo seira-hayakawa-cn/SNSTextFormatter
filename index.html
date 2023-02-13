@@ -17,6 +17,11 @@
       翻译文本 <br>
       <textarea id="input_translate_msg" style="resize: none;"></textarea><br>
 
+      <div class="checkbox">
+        <input type="checkbox" id="checkbox_add_tag">
+        <label for="checkbox_add_tag">顶部添加 "#早川圣来#" tag</label>
+      </div>
+
       <button id="button_generate">生成</button>
     </div>
     <div class="output">
@@ -28,55 +33,51 @@
 </body>
 
 <script type="text/javascript">
-  function date_format(date_str) {;
-    let date = new Date(date_str);
-    
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-
-    let res_str = `${year}-${month}-${day} ${hours}:${minutes}`;
-
-    return res_str;
-  }
   function check_input_format(in_str) {
-    let msg_str = in_str.match(/\u3010[a-z]+\u3011\n/);
+    let msg_str = in_str.match(/\u3010[a-z]+\u3011/);
     if (msg_str === null) {
       return false;
     }
-    let msg_type = msg_str[0].slice(1, -2);
+    let msg_type = msg_str[0].slice(1, -1);
     if (msg_type == "msg") {
-      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+\n/);
-      let type_str = in_str.match(/<\u7c7b\u578b>((\u56fe\u7247)|(\u6587\u672c)|(\u89c6\u9891)|(\u97f3\u9891))\n/);
-      if (date_str === null || type_str === null) {
+      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+/);
+      if (date_str === null) {
         return false;
       }
       return true;
     } else if (msg_type == "blog") {
-      return false;
+      let title_str = in_str.match(/<\u6807\u9898>[^.]+\n/);
+      if (title_str === null) {
+        return false;
+      }
+      return true;
     }
     return false;
   }
   function gen_sns_text(in_str, text) {
-    let msg_type = in_str.match(/\u3010[a-z]+\u3011\n/)[0].slice(1, -2);
-
-    let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+\n/)[0].slice(4, -1);
-    let date_format_str = date_format(date_str);
-
-    let footnote = "\u203b\u4ed8\u8d39\u5185\u5bb9\u8bf7\u52ff\u8f6c\u8f7d\u81f3\u5916\u7f51\uff0c\u6709\u9700\u6c42\u8bf7\u81ea\u884c\u8ba2\u9605<br/>\u203b\u7121\u65ad\u8ee2\u8f09\u3001\u518d\u914d\u4fe1\u7b49\u306f\u4e00\u5207\u304a\u65ad\u308a\u3057\u307e\u3059";
-    
-    text = text.replace(/\n/g, "<br/>")
+    let msg_type = in_str.match(/\u3010[a-z]+\u3011/)[0].slice(1, -1);
 
     if (msg_type == "msg") {
-      let res_str = `Message / ${date_format_str}<br/><br/>${text}<br/><br/>${footnote}`;
+      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+/)[0].slice(4);
+      let footnote = "\u203b\u4ed8\u8d39\u5185\u5bb9\u8bf7\u52ff\u8f6c\u8f7d\u81f3\u5916\u7f51\uff0c\u6709\u9700\u6c42\u8bf7\u81ea\u884c\u8ba2\u9605<br/>\u203b\u7121\u65ad\u8ee2\u8f09\u3001\u518d\u914d\u4fe1\u7b49\u306f\u4e00\u5207\u304a\u65ad\u308a\u3057\u307e\u3059";
+      text = text.replace(/\n/g, "<br/>");
+      let res_str = "";
+      if (document.getElementById("checkbox_add_tag").checked) {
+        res_str = `#早川圣来#<br/>Message / ${date_str}<br/><br/>${text}<br/><br/>${footnote}`;
+      } else {
+        res_str = `Message / ${date_str}<br/><br/>${text}<br/><br/>${footnote}`;
+      }
       return res_str;
     } else if (msg_type == "blog") {
-      let res_str = `Blog / ${date_format_str}\n\n`;
-      return res_str;
-    } else if (msg_type == "twitter") {
-      let res_str = `Blog / ${date_format_str}`;
+      let title_str = in_str.match(/<\u6807\u9898>[^.]+\n</)[0].slice(4, -2);
+      console.log(in_str.match(/<\u6807\u9898>[^.]+\n/))
+      console.log(title_str)
+      let res_str = "";
+      if (document.getElementById("checkbox_add_tag").checked) {
+        res_str = `#早川圣来#<br/>Blog / ${title_str}<br/>\u7ffb\u8bd1\u7a0d\u540e`;
+      } else {
+        res_str = `Blog / ${title_str}<br/>\u7ffb\u8bd1\u7a0d\u540e`;
+      }
       return res_str;
     }
     return "";
