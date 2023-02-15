@@ -40,7 +40,7 @@
     }
     let msg_type = msg_str[0].slice(1, -1);
     if (msg_type == "msg") {
-      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+/);
+      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+/);
       if (date_str === null) {
         return false;
       }
@@ -58,7 +58,7 @@
     let msg_type = in_str.match(/\u3010[a-z]+\u3011/)[0].slice(1, -1);
 
     if (msg_type == "msg") {
-      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+:[0-9]+/)[0].slice(4);
+      let date_str = in_str.match(/<\u65f6\u95f4>[0-9]+-[0-9]+-[0-9]+\ [0-9]+:[0-9]+/)[0].slice(4);
       let footnote = "\u203b\u4ed8\u8d39\u5185\u5bb9\u8bf7\u52ff\u8f6c\u8f7d\u81f3\u5916\u7f51\uff0c\u6709\u9700\u6c42\u8bf7\u81ea\u884c\u8ba2\u9605<br/>\u203b\u7121\u65ad\u8ee2\u8f09\u3001\u518d\u914d\u4fe1\u7b49\u306f\u4e00\u5207\u304a\u65ad\u308a\u3057\u307e\u3059";
       text = text.replace(/\n/g, "<br/>");
       let res_str = "";
